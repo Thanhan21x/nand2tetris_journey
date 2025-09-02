@@ -1,0 +1,15 @@
+CHIP Negate16 {
+	IN 
+		in[16], nin;
+	OUT
+		out[16];
+
+	PARTS: 
+		// Invert the input when nin == 1, else pass the input unchanged.
+		Not16(in=in, out=notIn);   // XOR with 1 will flip the bits (bitwise NOT).
+
+
+		// Use a multiplexer to choose between the input and negated value based on nin.
+		Mux16(a=in, b=notIn, sel=nin, out=out);  // If nin == 0, out = in; if nin == 1, out = negated.
+}
+
