@@ -71,7 +71,8 @@ int hasMoreLines(Parser* parser) {
 void advance(Parser *parser) {
 	/*
 	 * Only called if hasMoreLines is true
-	 * initially there's no cmd -> current = -1 at the beginning
+	 *
+	 * Set the current command
 	 */
 	parser->current++;
 }
