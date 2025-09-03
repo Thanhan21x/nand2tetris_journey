@@ -26,22 +26,11 @@ typedef enum __CommandType {
 	C_CALL,
 } CommandType;
 
-typedef struct __Command {
-	char line[MAX_COMMAND_LENGTH];
-} Command;
 
-typedef struct __Parser {
-	Command commands[MAX_NUM_COMMAND];
-	int current;
-	int count;
-} Parser;
-
-Parser* parser_init(const char* input_file);
-int hasMoreLines(Parser* parser);
-void advance(Parser* parser);
 CommandType commandType(const char*);
-char* commandLine(Parser* parser);
+
 char* get_arg1(char*);
+
 int get_arg2(char*);
 
 // Some helper functions
