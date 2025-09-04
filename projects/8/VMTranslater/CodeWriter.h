@@ -12,4 +12,40 @@ void writeArithmetic(FILE* fp, const char* cmd);
 //
 void writePushPop(FILE* fp, const char* seg, int idx);
 
+/*
+* This function is called when processing the whole directory project
+* where each file is a class file.
+*/
+char* setFileName(const char* fileName); 
+
+/*
+* Writes assembly code that effects the label command.
+*/
+void writeLabel(FILE* fp, const char* label);
+
+/*
+* Writes assembly code that effects the goto command.
+*/
+void writeGoto(FILE* fp, const char* label);
+
+/*
+* Write assembly code that effects the if commnand.
+*/
+void writeIf(FILE* fp, const char* label);
+
+/*
+* Write assembly code that effects the function command.
+*/
+void writeFunction(FILE* fp, const char* functionName, int nVars);
+
+/*
+* Write assembly code that effects the call command.
+*/
+void writeCall(FILE* fp, const char* functionName, int nArgs);
+
+/*
+* Write assembly code that effects the return command;
+*/
+void writeReturn(FILE* fp);
+
 #endif

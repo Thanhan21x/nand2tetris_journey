@@ -24,6 +24,7 @@ typedef enum __CommandType {
 	C_FUNCTION,
 	C_RETURN,
 	C_CALL,
+	C_LABEL,
 } CommandType;
 
 

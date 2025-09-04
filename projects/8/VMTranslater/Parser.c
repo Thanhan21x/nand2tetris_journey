@@ -34,7 +34,6 @@ CommandType commandType(const char* line) {
     if (strcmp(command, "pop") == 0) {
         return C_POP;
     }
-/*   
     // Check for program flow commands (for later projects)
     if (strcmp(command, "label") == 0) {
         return C_LABEL;
@@ -60,7 +59,6 @@ CommandType commandType(const char* line) {
     if (strcmp(command, "return") == 0) {
         return C_RETURN;
     }
-*/  
     // This should not happen with valid VM code
     // You might want to handle this case based on your error handling strategy
     return C_ARITHMETIC; // or throw an error

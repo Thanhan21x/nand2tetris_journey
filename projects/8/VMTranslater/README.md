@@ -64,4 +64,3 @@ in the correct locations in the host RAM.
   * 1st: no bootstrapping code
   * 2nd: write the bootstrapping code, as specified in the constructor's API.
   -> test -> FibonacciElement and StaticsTest.
-
