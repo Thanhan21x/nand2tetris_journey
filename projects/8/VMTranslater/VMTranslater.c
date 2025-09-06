@@ -45,9 +45,12 @@ void translate_code(const char *vm_code_file) {
 
 		CommandType type = commandType(line);
 
+		// comment the original cmd
+
+		fprintf(asmfp, "\n//%s\n", line);
 		if (type == C_PUSH || type == C_POP) {
 			arg2 = get_arg2(line);
-			writePushPop(asmfp, arg1, arg2); 
+			writePushPop(asmfp, type, arg1, arg2); 
 		} else if (type == C_ARITHMETIC) {
 			writeArithmetic(asmfp, arg1);	
 		} else if (type == C_LABEL) {

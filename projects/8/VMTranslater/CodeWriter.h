@@ -1,5 +1,6 @@
 #ifndef CODEWRITER_H
 #define CODEWRITER_H
+#include "Parser.h"
 #include <stdlib.h>
 #include <stdio.h>
 // get the name of the output file
@@ -10,7 +11,7 @@ char* create_output_filename(const char* input_filename);
 void writeArithmetic(FILE* fp, const char* cmd);
 
 //
-void writePushPop(FILE* fp, const char* seg, int idx);
+void writePushPop(FILE* fp, CommandType type, const char* seg, int idx);
 
 /*
 * This function is called when processing the whole directory project

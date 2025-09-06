@@ -1,4 +1,5 @@
 #include "CodeWriter.h"
+#include "Parser.h"
 #include <string.h>
 // Create output filename from input filename
 char* create_output_filename(const char* input_filename) {
@@ -25,12 +26,8 @@ char* create_output_filename(const char* input_filename) {
 int label_counter = 0;
 
 // Function to write push/pop commands
-void writePushPop(FILE* fp, const char* seg, int idx) {
-    if (strcmp(seg, "push") == 0) {
-        // This shouldn't happen - seg should be the memory segment
-        return;
-    }
-    
+void writePushPop(FILE* fp, CommandType type, const char* seg, int idx) {
+
     // Push operations
     if (strstr(seg, "constant") != NULL) {
         // push constant i
@@ -44,7 +41,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "local") != NULL) {
         // push/pop local i
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@LCL\n");
             fprintf(fp, "D=M\n");
             fprintf(fp, "@%d\n", idx);
@@ -70,9 +67,9 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
             fprintf(fp, "M=D\n");
         }
     }
-    else if (strstr(seg, "argument") != NULL) {
+    else if (strstr(seg, "argument") ) {
         // push/pop argument i
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@ARG\n");
             fprintf(fp, "D=M\n");
             fprintf(fp, "@%d\n", idx);
@@ -100,7 +97,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "this") != NULL) {
         // push/pop this i
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@THIS\n");
             fprintf(fp, "D=M\n");
             fprintf(fp, "@%d\n", idx);
@@ -128,7 +125,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "that") != NULL) {
         // push/pop that i
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@THAT\n");
             fprintf(fp, "D=M\n");
             fprintf(fp, "@%d\n", idx);
@@ -156,7 +153,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "temp") != NULL) {
         // push/pop temp i (temp segment starts at RAM[5])
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@R%d\n", 5 + idx);
             fprintf(fp, "D=M\n");
             fprintf(fp, "@SP\n");
@@ -174,7 +171,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "pointer") != NULL) {
         // push/pop pointer i (0=THIS, 1=THAT)
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             if (idx == 0) {
                 fprintf(fp, "@THIS\n");
             } else {
@@ -200,7 +197,7 @@ void writePushPop(FILE* fp, const char* seg, int idx) {
     }
     else if (strstr(seg, "static") != NULL) {
         // push/pop static i
-        if (strstr(seg, "push") != NULL) {
+        if (type == C_PUSH) {
             fprintf(fp, "@Static.%d\n", idx);
             fprintf(fp, "D=M\n");
             fprintf(fp, "@SP\n");
@@ -331,15 +328,24 @@ void writeGoto(FILE *fp, const char *label) {
 
 void writeIf(FILE *fp, const char *label) {
 	/* 
-	* If check the top value on the stack
-	* value > 0 -> true -> jump
-	* else -> false -> skip
+	 * If-goto pops the top value from the stack
+	 * if value != 0 (true) -> jump to label
+	 * if value == 0 (false) -> continue
 	*/
 
+	// Decrement stack pointer (pop)
 	fprintf(fp, "@SP\n");
-	fprintf(fp, "A=M-1\n");
-	fprintf(fp, "D=M\n");
-	fprintf(fp, "@%s\n", label);
-	fprintf(fp, "D;JGT\n");
+	fprintf(fp, "M=M-1\n");
 
+	// Get the pop value into the D register
+	fprintf(fp, "@SP\n");
+	fprintf(fp, "A=M\n");
+	fprintf(fp, "D=M\n");
+
+	// Jump to label if D != 0 
+	fprintf(fp, "@%s\n", label);
+	fprintf(fp, "D;JNE\n");
 }
+
+
+
