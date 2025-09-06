@@ -29,7 +29,7 @@ void writeLabel(FILE* fp, const char* label);
 void writeGoto(FILE* fp, const char* label);
 
 /*
-* Write assembly code that effects the if commnand.
+* Write assembly code that effects the if-goto commnand.
 */
 void writeIf(FILE* fp, const char* label);
 

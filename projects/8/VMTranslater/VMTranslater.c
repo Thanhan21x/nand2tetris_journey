@@ -26,10 +26,15 @@ void translate_code(const char *vm_code_file) {
 		
 		// Get the command (the real command)
 		line[strcspn(line, "\n")] = '\0'; // turn "\n" to '\0'
-		// Skip comment and empty line
-		if (isCommentLine(line) || isEmptyLine(line)) {
+		
+		// Remove comment 
+		removeComment(line);
+
+		// Skip empty line
+		if (isEmptyLine(line)) {
 			continue;
 		}
+
 		// Trim white spaces
 		trimSpaces(line);
 
@@ -42,11 +47,17 @@ void translate_code(const char *vm_code_file) {
 
 		if (type == C_PUSH || type == C_POP) {
 			arg2 = get_arg2(line);
-
 			writePushPop(asmfp, arg1, arg2); 
 		} else if (type == C_ARITHMETIC) {
 			writeArithmetic(asmfp, arg1);	
-		}
+		} else if (type == C_LABEL) {
+			writeLabel(asmfp, arg1);
+		} else if (type == C_GOTO) {
+			writeGoto(asmfp, arg1);
+		} else if (type == C_IF) {
+			writeIf(asmfp, arg1);
+		} 
+		
 	}
 
 	// close in/out file

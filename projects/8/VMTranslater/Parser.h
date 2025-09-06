@@ -35,7 +35,7 @@ char* get_arg1(char*);
 int get_arg2(char*);
 
 // Some helper functions
+char* removeComment(char* line);
 int isEmptyLine(const char* line);
-int isCommentLine(const char* line);
 void trimSpaces(char* line);
 #endif

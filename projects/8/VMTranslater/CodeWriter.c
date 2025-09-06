@@ -319,3 +319,27 @@ void writeArithmetic(FILE* fp, const char* cmd) {
         fprintf(fp, "M=!M\n");
     }
 }
+
+void writeLabel(FILE *fp, const char *label) {
+	fprintf(fp, "(%s)\n", label);
+}
+
+void writeGoto(FILE *fp, const char *label) {
+	fprintf(fp, "@%s\n", label);
+	fprintf(fp, "0;JMP\n");
+}
+
+void writeIf(FILE *fp, const char *label) {
+	/* 
+	* If check the top value on the stack
+	* value > 0 -> true -> jump
+	* else -> false -> skip
+	*/
+
+	fprintf(fp, "@SP\n");
+	fprintf(fp, "A=M-1\n");
+	fprintf(fp, "D=M\n");
+	fprintf(fp, "@%s\n", label);
+	fprintf(fp, "D;JGT\n");
+
+}

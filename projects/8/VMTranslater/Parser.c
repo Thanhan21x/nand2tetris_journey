@@ -120,13 +120,14 @@ int isEmptyLine(const char* line) {
 	return 1;
 }
 
-int isCommentLine(const char* line) {
+char* removeComment(char* line) {
 	char *cmt = strstr(line, "//");
 
 	if(cmt) {
-		return 1;
+		*cmt = '\0';
+		return line;
 	} else {
-		return 0;
+		return line;
 	}
 }
 
